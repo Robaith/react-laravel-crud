@@ -2,9 +2,26 @@ import React, { Component } from 'react'
 import MyForm from './MyForm'
 import "./app.css"
 import CustomerList from './CustomerList'
+import axios from 'axios'
 
 class App extends Component {
-    state = {  }
+    state = { 
+        customers: [],
+        url: "http://localhost/React_Laravel/public/api/customers"
+     }
+
+     getCustomers = async () => {
+         const customers = await axios.get(this.state.url);
+         this.setState(
+             {
+                 customers: customers.data
+             }
+         )
+    }
+
+    componentDidMount() {
+        this.getCustomers();
+    }
     render() { 
         return ( 
             <div>
@@ -18,7 +35,7 @@ class App extends Component {
                 </div>
                 <div className="ui main container">
                     <MyForm />
-                    <CustomerList />
+                    <CustomerList customers={this.state.customers} />
                 </div>
             </div>
          );
